@@ -125,11 +125,35 @@ export default function HistoryPage() {
                   <div className="mb-4">
                     <h3 className="font-semibold text-blue-400 text-sm mb-1">Action Items</h3>
                     <div className="bg-gray-900 p-3 rounded-lg border border-gray-700 text-xs text-gray-300">
-                      <pre className="whitespace-pre-wrap font-sans">
-                        {typeof note.action_items === 'string'
-                          ? note.action_items
-                          : JSON.stringify(note.action_items, null, 2)}
-                      </pre>
+                      {Array.isArray(note.action_items) ? (
+                        <ul className="list-disc list-inside space-y-1">
+                          {note.action_items.map((item: any, index: number) => (
+                            <li key={index}>
+                              {typeof item === 'object' && item !== null ? (
+                                <span>
+                                  <strong>Task:</strong> {item.task || item.description || JSON.stringify(item)}
+                                  {item.owner && ` | Owner: ${item.owner}`}
+                                  {item.priority && ` | Priority: ${item.priority}`}
+                                </span>
+                              ) : (
+                                String(item)
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : typeof note.action_items === 'object' && note.action_items !== null ? (
+                        <ul className="list-disc list-inside space-y-1">
+                          {Object.entries(note.action_items).map(([key, value]: [string, any], index: number) => (
+                            <li key={index}>
+                              <strong>{key}:</strong> {typeof value === 'object' ? JSON.stringify(value) : String(value)}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="whitespace-pre-wrap font-sans">
+                          {String(note.action_items)}
+                        </p>
+                      )}
                     </div>
                   </div>
                 )}
