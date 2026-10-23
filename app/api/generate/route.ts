@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const { transcript } = await req.json();
 
     const { text } = await generateText({
-      model: google('gemini-1.5-flash-001'),
+      model: google('gemini-3.8-flash'),
       prompt: `
         Analyze the following meeting transcript and generate structured meeting notes containing:
         1. Summary
